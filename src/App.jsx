@@ -8,6 +8,7 @@ import Search from './components/Search'
 function App() {
     const [currentWeather, setCurrentWeather] = useState(null)
     const [forecast, setForecast] = useState(null)
+/*     const [change, setChange] = useState(true) */
 
     useEffect(() => {
         const succes = ((pos) => {
@@ -46,6 +47,17 @@ function App() {
             })
             .catch((err) => console.log(err))
     }
+
+/*     const handleTemp = (() => {
+        setChange(!change)
+        const tempC = currentWeather.main.temp
+        console.log(tempC)
+        if (change) {
+            currentWeather.main.temp = (Math.round(tempC) * 9 / 5) + 32
+        } else {
+            currentWeather.main.temp = tempC
+        }
+    }) */
     return (
         <div className="App">
             <Search onSearchChange={handleOnChangeChange} />
