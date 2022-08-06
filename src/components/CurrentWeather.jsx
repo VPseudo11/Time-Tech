@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
 import './CurrentWeather.css'
 
-const CurrentWeather = ({ data }) => {
+const CurrentWeather = ({ data, onChange }) => {
     const [change, setChange] = useState(false)
-    const [temp, setTemp] = useState([(Math.round(data.main.temp)), '°C', (data.main.feels_like)])
+    const [temp, setTemp] = useState([(Math.round(data.main.temp)), '°C', (data.main.feels_like), '°F'])
+
     const handleTemp = (() => {
         setChange(!change)
+        onChange(change)
         if (change) {
-            setTemp([Math.round((temp[0] - 32) * 5 / 9), '°C', ((temp[2] - 32) * 5 / 9)])
-
+            setTemp([Math.round((temp[0] - 32) * 5 / 9), '°C', (Math.round((((temp[2] - 32) * 5 / 9) + Number.EPSILON) * 100) / 100), '°F'])
         } else {
-            setTemp([((temp[0] * 9 / 5) + 32), '°F', ((temp[2] * 9 / 5) + 32)])
+            setTemp([((temp[0] * 9 / 5) + 32), '°F', (Math.round((((temp[2] * 9 / 5) + 32) + Number.EPSILON) * 100) / 100), '°C'])
         }
     })
+
     return (
         <div className='weather'>
             <div className='top'>
@@ -47,7 +49,7 @@ const CurrentWeather = ({ data }) => {
                 </div>
             </div>
             <div className='ChangeButton'>
-                <button onClick={handleTemp}>°C/°F</button>
+                <button onClick={handleTemp}>{temp[1]} <i className="fa-solid fa-angle-right"></i> {temp[3]}</button>
             </div>
         </div>
     )

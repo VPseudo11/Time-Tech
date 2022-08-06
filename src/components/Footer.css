@@ -1,0 +1,13 @@
+.Footer {
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #002a46;
+    margin: 30px auto 0 auto;
+}
+
+.Footer p {
+    color: #fff;
+    font-weight: 500;
+}
