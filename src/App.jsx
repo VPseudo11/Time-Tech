@@ -5,14 +5,17 @@ import CurrentWeather from './components/CurrentWeather'
 import Footer from './components/Footer'
 import Forecast from './components/Forecast'
 import Header from './components/Header'
+import Loader from './components/Loader'
 import Search from './components/Search'
 
 function App() {
     const [currentWeather, setCurrentWeather] = useState(null)
     const [forecast, setForecast] = useState(null)
+    const [loading, setLoading] = useState(false)
     const [changeV, setChangeV] = useState(true)
 
     useEffect(() => {
+        setLoading(true)
         const succes = ((pos) => {
             const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${WEATHER_API_KEY}&units=metric`)
             const forecastFetch = fetch(`${WEATHER_API_URL}/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${WEATHER_API_KEY}&units=metric`)
@@ -26,6 +29,7 @@ function App() {
                     forecastResponse.degree = '°C'
                     setCurrentWeather({ city: nameCountry, ...weatherResponse })
                     setForecast({ city: nameCountry.name, ...forecastResponse })
+                    setLoading(false)
                 })
                 .catch((err) => console.log(err))
         })
@@ -33,6 +37,7 @@ function App() {
     }, [])
 
     const handleOnChangeChange = (searchData) => {
+        setLoading(true)
         const [lat, lon] = searchData.value.split(' ')
 
         const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`)
@@ -45,6 +50,7 @@ function App() {
                 console.log(forecastResponse)
                 setCurrentWeather({ city: searchData.label, ...weatherResponse })
                 setForecast({ city: searchData.label, ...forecastResponse })
+                setLoading(false)
             })
             .catch((err) => console.log(err))
     }
@@ -74,6 +80,7 @@ function App() {
         <div className="App">
             <Header />
             <Search onSearchChange={handleOnChangeChange} />
+            {loading && <Loader />}
             {currentWeather && <CurrentWeather data={currentWeather} onChange={handleChange} />}
             {forecast && <Forecast data={forecast} />}
             <Footer />
